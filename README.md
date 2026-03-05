@@ -14,6 +14,14 @@ curl -sSL https://cli.clay.cl | bash
 
 Descarga el `.zip` desde la [última release](https://github.com/madeofclay/claycl-releases/releases/latest), descomprime y agrega el ejecutable a tu PATH.
 
+## Actualización
+
+Vuelve a correr el mismo comando de instalación — sobreescribe el binario con la última versión:
+
+```bash
+curl -sSL https://cli.clay.cl | bash
+```
+
 ---
 
 ## Configuración
@@ -184,7 +192,7 @@ claycl conexiones editar \
   --banco banco_estado
 
 # Sincronizar (actualizar datos)
-claycl conexiones sync --id abc123
+claycl conexiones sync --proveedor banco_estado --rut 76345678 --dv 9 --categoria banco
 
 # Validar conexión (onboarding)
 claycl conexiones onboarding \
