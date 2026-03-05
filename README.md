@@ -7,9 +7,7 @@ CLI para la [API de Clay](https://api.clay.cl) — contabilidad, bancos, obligac
 ### macOS / Linux
 
 ```bash
-VERSION=$(curl -s https://api.github.com/repos/madeofclay/claycl-releases/releases/latest | grep '"tag_name"' | cut -d'"' -f4)
-curl -sSL "https://github.com/madeofclay/claycl-releases/releases/download/${VERSION}/claycl_${VERSION#v}_$(uname -s | tr '[:upper:]' '[:lower:]')_$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/').tar.gz" | tar xz
-sudo mv claycl /usr/local/bin/
+curl -sSL https://cli.clay.cl | bash
 ```
 
 ### Windows
