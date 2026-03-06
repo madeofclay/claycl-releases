@@ -26,15 +26,17 @@ curl -sSL https://cli.clay.cl | bash
 
 ## Configuración
 
+Obtén tu token en [app.clay.cl → Ajustes generales → Perfil](https://app.clay.cl/ajustes/perfil). Solo administradores y propietarios pueden crear tokens.
+
 **Opción 1 — Variable de entorno:**
 ```bash
-export CLAYCL_API_KEY=tu_api_key
+export CLAYCL_API_KEY=tu_token
 ```
 
 **Opción 2 — Archivo de configuración:**
 ```bash
 mkdir -p ~/.claycl
-echo '{"api_key": "tu_api_key"}' > ~/.claycl/config.json
+echo '{"api_key": "tu_token"}' > ~/.claycl/config.json
 ```
 
 ---
@@ -223,17 +225,40 @@ Ver [releases](https://github.com/madeofclay/claycl-releases/releases) para el h
 
 ## Usar con Claude
 
-claycl se puede conectar a Claude Desktop o Claude Code para que Claude pueda consultar datos contables y bancarios directamente.
+claycl se integra con Claude de dos formas: directamente desde **claude.ai** (sin instalar nada) o vía **Claude Desktop / Claude Code** con el CLI instalado.
 
-### Paso 1 — Instala claycl
+---
+
+### Opción A — claude.ai (sin instalación)
+
+Conecta Clay directamente desde el navegador en pocos pasos.
+
+**Paso 1** — En claude.ai, ve a **Settings → Connectors → Add custom connector** e ingresa:
+
+```
+https://mcp.clay.cl
+```
+
+**Paso 2** — Claude te pedirá autorización. Ingresa tu token de Clay cuando se solicite.
+Lo encuentras en [app.clay.cl → Ajustes generales → Perfil](https://app.clay.cl/ajustes/perfil).
+
+**Paso 3** — Listo. Escribe en el chat:
+
+> "¿Cuáles son mis empresas en Clay?"
+
+---
+
+### Opción B — Claude Desktop / Claude Code (CLI)
+
+Requiere tener claycl instalado.
+
+**Paso 1** — Instala claycl:
 
 ```bash
 curl -sSL https://cli.clay.cl | bash
 ```
 
-### Paso 2 — Agrega la configuración a Claude Desktop
-
-Abre (o crea) el archivo `~/Library/Application Support/Claude/claude_desktop_config.json` y agrega:
+**Paso 2** — Agrega la configuración a Claude Desktop (`~/Library/Application Support/Claude/claude_desktop_config.json`):
 
 ```json
 {
@@ -242,19 +267,17 @@ Abre (o crea) el archivo `~/Library/Application Support/Claude/claude_desktop_co
       "command": "claycl",
       "args": ["mcp"],
       "env": {
-        "CLAYCL_API_KEY": "TU_API_KEY_AQUI"
+        "CLAYCL_API_KEY": "tu_token"
       }
     }
   }
 }
 ```
 
-Reemplaza `TU_API_KEY_AQUI` con tu API key de Clay. Luego **reinicia Claude Desktop**.
+Para Claude Code, crea `.claude/mcp.json` en la raíz de tu proyecto con el mismo contenido.
 
-### Paso 3 — Pruébalo
+Obtén tu token en [app.clay.cl → Ajustes generales → Perfil](https://app.clay.cl/ajustes/perfil). Luego **reinicia Claude Desktop**.
 
-Abre una conversación en Claude y escribe:
+**Paso 3** — Pruébalo:
 
 > "¿Cuáles son mis empresas en Clay?"
-
-Claude usará claycl automáticamente para responder con datos reales.
