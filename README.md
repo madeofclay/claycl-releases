@@ -218,3 +218,47 @@ claycl conexiones delete --id abc123
 ## Changelog
 
 Ver [releases](https://github.com/madeofclay/claycl-releases/releases) para el historial de versiones.
+
+---
+
+## MCP (Model Context Protocol)
+
+claycl puede usarse como servidor MCP para conectarlo a Claude Desktop o Claude Code.
+
+```json
+{
+  "mcpServers": {
+    "claycl": {
+      "command": "claycl",
+      "args": ["mcp"],
+      "env": {"CLAYCL_API_KEY": "tu_key"}
+    }
+  }
+}
+```
+
+Guarda esa configuración en `~/.claude/claude_desktop_config.json` (Claude Desktop) o `.claude/mcp.json` en la raíz de tu proyecto (Claude Code).
+
+Tools disponibles: `clay_empresas`, `clay_obligaciones`, `clay_bancos`, `clay_contabilidad`, `clay_clientes`, `clay_conexiones`.
+
+---
+
+## Telemetría
+
+Por defecto, cada invocación queda registrada localmente en `~/.claycl/usage.log` (JSON lines). No se envía nada a ningún servidor.
+
+```bash
+# Ver actividad en tiempo real
+tail -f ~/.claycl/usage.log | jq .
+
+# Resumen por comando
+cat ~/.claycl/usage.log | jq -s 'group_by(.tool) | map({tool: .[0].tool, count: length}) | sort_by(-.count)'
+```
+
+**Opt-in CloudWatch** (para equipos con CloudWatch Agent):
+
+```bash
+export CLAYCL_TELEMETRY=1
+```
+
+Con esta variable activa, además del log local se escribe el evento en formato EMF a stderr para que CloudWatch Agent lo envíe al log group `/claycl/usage`.
