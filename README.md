@@ -221,9 +221,19 @@ Ver [releases](https://github.com/madeofclay/claycl-releases/releases) para el h
 
 ---
 
-## MCP (Model Context Protocol)
+## Usar con Claude
 
-claycl puede usarse como servidor MCP para conectarlo a Claude Desktop o Claude Code.
+claycl se puede conectar a Claude Desktop o Claude Code para que Claude pueda consultar datos contables y bancarios directamente.
+
+### Paso 1 — Instala claycl
+
+```bash
+curl -sSL https://cli.clay.cl | bash
+```
+
+### Paso 2 — Agrega la configuración a Claude Desktop
+
+Abre (o crea) el archivo `~/Library/Application Support/Claude/claude_desktop_config.json` y agrega:
 
 ```json
 {
@@ -231,34 +241,20 @@ claycl puede usarse como servidor MCP para conectarlo a Claude Desktop o Claude 
     "claycl": {
       "command": "claycl",
       "args": ["mcp"],
-      "env": {"CLAYCL_API_KEY": "tu_key"}
+      "env": {
+        "CLAYCL_API_KEY": "TU_API_KEY_AQUI"
+      }
     }
   }
 }
 ```
 
-Guarda esa configuración en `~/.claude/claude_desktop_config.json` (Claude Desktop) o `.claude/mcp.json` en la raíz de tu proyecto (Claude Code).
+Reemplaza `TU_API_KEY_AQUI` con tu API key de Clay. Luego **reinicia Claude Desktop**.
 
-Tools disponibles: `clay_empresas`, `clay_obligaciones`, `clay_bancos`, `clay_contabilidad`, `clay_clientes`, `clay_conexiones`.
+### Paso 3 — Pruébalo
 
----
+Abre una conversación en Claude y escribe:
 
-## Telemetría
+> "¿Cuáles son mis empresas en Clay?"
 
-Por defecto, cada invocación queda registrada localmente en `~/.claycl/usage.log` (JSON lines). No se envía nada a ningún servidor.
-
-```bash
-# Ver actividad en tiempo real
-tail -f ~/.claycl/usage.log | jq .
-
-# Resumen por comando
-cat ~/.claycl/usage.log | jq -s 'group_by(.tool) | map({tool: .[0].tool, count: length}) | sort_by(-.count)'
-```
-
-**Opt-in CloudWatch** (para equipos con CloudWatch Agent):
-
-```bash
-export CLAYCL_TELEMETRY=1
-```
-
-Con esta variable activa, además del log local se escribe el evento en formato EMF a stderr para que CloudWatch Agent lo envíe al log group `/claycl/usage`.
+Claude usará claycl automáticamente para responder con datos reales.
